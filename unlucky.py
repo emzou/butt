@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from psaw import PushshiftAPI                               
 import datetime as dt                                       
 import pandas as pd                                         
@@ -14,38 +15,30 @@ pd.set_option("display.max_columns", None)
 
 def data_prep_posts(subreddit, term, start_time, end_time, filters, limit):
     if(len(filters) == 0):
-        filters = ['id', 'author', 'created_utc',
-                   'domain', 'url',
-                   'title', 'num_comments']                 #We set by default some columns that will be useful for data analysis
+        filters = ['id', 'author', 'created_utc', 'domain', 'url', 'title', 'num_comments']                
     
     posts = list(api.search_submissions(
-        subreddit=subreddit,                                #We set the subreddit we want to audit
+        subreddit=subreddit,                                
         q=term, 
-        after=start_time,                                   #Start date
-        before=end_time,                                    #End date
-        filter=filters,                                     #Column names we want to get from reddit
+        after=start_time,                                   
+        before=end_time,                                    
+        filter=filters,                                    
         limit=limit,                                   
         ))
-    return pd.DataFrame(posts)                              #Return dataframe for analysis
+    return pd.DataFrame(posts)                              
 
-"""FOR COMMENTS"""
 def data_prep_comments(subreddit, term, start_time, end_time, filters, limit):
     if (len(filters) == 0):
-        filters = ['id', 'author', 'created_utc',
-                   'body', 'permalink', 'subreddit']        #We set by default some columns that will be useful for data analysis
+        filters = ['id', 'author', 'created_utc', 'body', 'permalink', 'subreddit']       
 
     comments = list(api.search_comments(
         subreddit= subreddit,
-        q=term,                                             #We set the subreddit we want to audit
-        after=start_time,                                   #Start date
-        before=end_time,                                    #End date
-        filter=filters,                                     #Column names we want to get from reddit
+        q=term,                                             
+        after=start_time,                                   
+        before=end_time,                                    
+        filter=filters,                                     
         limit=limit,))                                      
-    return pd.DataFrame(comments)                           #Return dataframe for analysis
-
-"""
-END - DATAFRAME GENERATION FUNCTIONS
-"""
+    return pd.DataFrame(comments)                           
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Create a dataset.')
@@ -63,12 +56,12 @@ if __name__== "__main__" :
         os.mkdir(args.out)
 
     year = args.year
+    year = int (year)
     month = args.month
+    month = int (month)
     m_range = calendar.monthrange(year, month)
     firstdate = m_range[0]
     lastdate = m_range[1]
-
-    print(m_range, firstdate, lastdate)
 
     #Name of the subreddit we are auditing
     subreddit = args.subreddit
