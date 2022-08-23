@@ -60,18 +60,11 @@ if __name__== "__main__" :
     month = args.month
     month = int (month)
     m_range = calendar.monthrange(year, month)
-    firstdate = m_range[0]
-    lastdate = m_range[1]
 
-    #Name of the subreddit we are auditing
-    subreddit = args.subreddit
-    #We use r/ as a generic indicator for mentions of other subreddits                           
+    subreddit = args.subreddit                       
     term = 'r/' 
-    #We define the starting date for our search
-    start_time = int(dt.datetime(year, month, firstdate).timestamp())
-    #We define the ending date for our search
-    end_time = int(dt.datetime(year, month, lastdate).timestamp())
-    #We don´t want specific filters
+    start_time = int(dt.datetime(year, month, 1).timestamp())
+    end_time = int(dt.datetime(year, month, m_range[1]).timestamp())
     filters = []                                           
     limit = 5000  
 
@@ -94,6 +87,7 @@ if __name__== "__main__" :
     df_c.drop(df_c[df_c['author'] == "Spacesider"].index, inplace = True)
     df_c.drop(df_c[df_c['author'] == "jwinterm"].index, inplace = True)
     df_c.drop(df_c[df_c['author'] == "Cintre"].index, inplace = True)
+    df_c.drop(df_c[df_c['author'] == "SnapshillBot"].index, inplace = True) 
     
     for i in df_c['body']: 
         if 'r/' in i: 
